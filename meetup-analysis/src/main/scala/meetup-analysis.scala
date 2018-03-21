@@ -68,9 +68,7 @@ object MeetupAnalysis {
                                     "to_json(struct(*)) AS value")
 
     val query = (
-      jsonOut
-      writeStream()
-      outputMode("update")
+      jsonOut.writeStream.outputMode("update")
       format("kafka")
       option("kafka.bootstrap.servers", "localhost:29092")
       option("topic", "meetup_analysis")
