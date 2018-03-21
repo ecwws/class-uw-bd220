@@ -15,6 +15,7 @@ object MeetupAnalysis {
     val sc = spark.sparkContext
 
     val schema = (new StructType()
+      add("mtime", LongType)
       add("group",
         new StructType()
           add("group_city", StringType)
@@ -36,9 +37,10 @@ object MeetupAnalysis {
 
     val result = (
       data.select(
-        "parsed.group.group_country",
-        "parsed.group.group_state",
-        "parsed.group.group_city"
+        from_unixtime((col("parsed.mtime")/1000).cast(IntegerType)).as("timestamp"),
+        col("parsed.group.group_country"),
+        col("parsed.group.group_state"),
+        col("parsed.group.group_city")
       )
     )
 
